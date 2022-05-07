@@ -1,9 +1,31 @@
 
-type ZipFile = {name:string,data:ArrayBuffer|Uint8Array|string};
-type ZipEntry = {name:string,size:number,crc:number,offset:number};
+type ZipFile = { name:string,data:ArrayBuffer|Uint8Array|string };
+type ZipEntry = { name: Uint8Array,size:number,crc:number,offset:number};
 
 function isNullOrUndefined(obj:any) {
     return obj === null || obj === undefined;
+}
+
+function string2Uint8Array (str: string) {
+    const buffer: number[] = [];
+    for (let char of str) {
+        let charCode = char.charCodeAt(0);
+        if (charCode < 0x80) buffer.push(charCode);
+        else if (charCode < 0x800) {
+            buffer.push(0xc0 + (charCode >> 6));
+            buffer.push(0x80 + (charCode & 0x3f));
+        } else if (charCode < 0x10000) {
+            buffer.push(0xe0 + (charCode >> 12));
+            buffer.push(0x80 + (charCode >> 6 & 0x3f));
+            buffer.push(0x80 + (charCode & 0x3f));
+        } else {
+            charCode = charCode & 0xffff;
+            buffer.push(0xe0 + (charCode >> 12));
+            buffer.push(0x80 + (charCode >> 6 & 0x3f));
+            buffer.push(0x80 + (charCode & 0x3f));
+        }
+    }
+    return Uint8Array.from(buffer);
 }
 
 class SimpleBuffer {
@@ -143,6 +165,8 @@ class SimpleZip {
             if(typeof file.name !== 'string' || file.name.length <= 0) {
                 throw new Error("File name must be a string with >0 characters");
             }
+
+            const fileNameBuffer = string2Uint8Array(file.name);
     
             let data : Uint8Array;
             if(typeof file.data === 'string') {
@@ -159,7 +183,7 @@ class SimpleZip {
             }
             
             let zEntry:ZipEntry = {
-                name: file.name,
+                name: fileNameBuffer,
                 size: data.byteLength,
                 crc: SimpleZip.calcCRC32(data),
                 offset: -1
@@ -183,7 +207,7 @@ class SimpleZip {
 
             this.buf.writeu32(0x04034b50); //Header sig
             this.buf.writeu16(0x000a); //Version
-            this.buf.writeu16(0x0000); //Bit Flag
+            this.buf.writeu16(0x0800); //Bit Flag
             this.buf.writeu16(0x0000); //Compression Method(none)
             this.buf.writeu16(this.createdTime); //Last mod Time
             this.buf.writeu16(this.createdDate); //Last mod Date
@@ -192,7 +216,7 @@ class SimpleZip {
             this.buf.writeu32(zEntry.size); //Uncompressed Size
             this.buf.writeu16(zEntry.name.length); //Filename Length
             this.buf.writeu16(0); //Extra Field Length
-            this.buf.writeStr(zEntry.name); // Name
+            this.buf.append(zEntry.name); // Name
             // no extra field
             this.buf.append(data); // Uncompressed Data
     
@@ -216,7 +240,7 @@ class SimpleZip {
             this.buf.writeu32(0x02014b50); //Header sig
             this.buf.writeu16(0x003f); //Version made by Windows
             this.buf.writeu16(0x000a); //Version needed
-            this.buf.writeu16(0x0000); //Bit Flag
+            this.buf.writeu16(0x0800); //Bit Flag
             this.buf.writeu16(0x0000); //Compression Method(none)
             this.buf.writeu16(this.createdTime); //Last mod Time
             this.buf.writeu16(this.createdDate); //Last mod Date
@@ -230,7 +254,7 @@ class SimpleZip {
             this.buf.writeu16(0x0000); //Internal Attributes
             this.buf.writeu32(0x00000020); //External Attributes
             this.buf.writeu32(file.offset); //Relative Offset
-            this.buf.writeStr(file.name); //File Name
+            this.buf.append(file.name); //File Name
             // Write more accurate timestamp, using NTFS extra field
             this.buf.writeu16(0x000a) // NTFS timestamp
             this.buf.writeu16(0x0020) // 32 bytes of data

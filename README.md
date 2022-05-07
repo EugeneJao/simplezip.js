@@ -27,7 +27,7 @@ fs.writeFileSync("output.zip", new Buffer(data), {encoding: 'binary'});
 ```
 
 ## With HTML / Javascript
-It's easy! Add [simplezip.min.js](https://raw.githubusercontent.com/Jamezo97/simplezip.js/master/build/simplezip.min.js) to your project, then add
+It's easy! Add [simplezip.min.js](https://raw.githubusercontent.com/EugeneJao/simplezip.js/master/build/simplezip.min.js) to your project, then add
 ```html
 <script type="text/javascript" src="?...../simplezip.min.js"></script>
 ```
@@ -56,12 +56,17 @@ document.getElementsByTagName("body")[0].appendChild(el);
 ``` 
 
 # API
-- [SimpleZip.<b>GenerateZipFrom()</b>](#generatezipfrom)
-- [new <b>SimpleZip()</b>](#constructor)
-- [SimpleZip#<b>appendFiles()</b>](#appendfiles)
-- [SimpleZip#<b>appendFile()</b>](#appendfile)
-- [SimpleZip#<b>generate()</b>](#generate)
-- [SimpleZip#<b>ensureRemainingSpace()</b>](#ensureremainingspace)
+- [SimpleZIP.js](#simplezipjs)
+- [Getting Started](#getting-started)
+  - [With NPM / NodeJS](#with-npm--nodejs)
+  - [With HTML / Javascript](#with-html--javascript)
+- [API](#api)
+    - [SimpleZip.GenerateZipFrom([files])](#simplezipgeneratezipfromfiles)
+    - [new SimpleZip(expectedSize)](#new-simplezipexpectedsize)
+    - [SimpleZip#appendFiles([files])](#simplezipappendfilesfiles)
+    - [SimpleZip#appendFile(file)](#simplezipappendfilefile)
+    - [SimpleZip#generate()](#simplezipgenerate)
+    - [SimpleZip#ensureRemainingSpace(remaining)](#simplezipensureremainingspaceremaining)
 
 
 Note that all 'files' passed to the SimpleZip API should be of the form

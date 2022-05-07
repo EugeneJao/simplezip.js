@@ -1,7 +1,7 @@
 {
-  "name": "simplezip.js",
+  "name": "@eugene_jao/simplezip.js",
   "version": "1.1.0",
-  "description": "Lightweight uncompressed browser-compatible ZIP generation",
+  "description": "Lightweight uncompressed browser-compatible ZIP generation, supported file name encoded by utf-8",
   "main": "lib/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -9,19 +9,20 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Jamezo97/simplezip.js.git"
+    "url": "git+https://github.com/EugeneJao/simplezip.js.git"
   },
   "keywords": [
     "zip",
     "uncompressed",
-    "browser"
+    "browser",
+    "utf-8"
   ],
-  "author": "James Wyatt",
+  "author": "eugene_jao",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/Jamezo97/simplezip.js/issues"
+    "url": "https://github.com/EugeneJao/simplezip.js/issues"
   },
-  "homepage": "https://github.com/Jamezo97/simplezip.js#readme",
+  "homepage": "https://github.com/EugeneJao/simplezip.js#readme",
   "devDependencies": {
     "browserify": "^16.2.2",
     "typescript": "^3.0.3",
