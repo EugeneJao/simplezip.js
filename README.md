@@ -1,5 +1,5 @@
 # SimpleZIP.js
-A light-weight library for building uncompressed ZIP files, in NodeJS or in the Browser.
+A light-weight library for building uncompressed ZIP files, in NodeJS or in the Browser. Supported file name encoded by utf-8.
 
 # Getting Started
 ## With NPM / NodeJS
